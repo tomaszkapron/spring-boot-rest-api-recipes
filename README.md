@@ -12,6 +12,19 @@ This project built using **Java** and the following tools:
 - [H2](https://h2database.com/) as database implementation
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) as the top layer over Hibernate
 
+## Installation 
+Clone repository
+```
+  git clone https://github.com/tomaszkapron/spring-boot-rest-api-recipes
+```
+
+Build and run (If working on Windows use gradlew.bat scripts instead)
+```
+  gradlew build
+  gradlew run
+```
+The app will start running at http://localhost:8881
+
 ## Endpoints
 
 | Method | Url | Decription |
