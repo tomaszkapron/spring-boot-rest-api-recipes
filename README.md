@@ -25,6 +25,9 @@ Build and run (If working on Windows use gradlew.bat scripts instead)
 ```
 The app will start running at http://localhost:8881
 
+## H2 database console
+H2 database console is available under http://localhost:8881/h2
+
 ## Endpoints
 
 | Method | Url | Decription |
