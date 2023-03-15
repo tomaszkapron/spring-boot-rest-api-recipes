@@ -22,6 +22,12 @@ public class RecipeController {
     @Autowired
     RecipeService recipeService;
 
+    @GetMapping("/api/recipe/all")
+    public List<Recipe> getAllRecipes() {
+        //TODO: add pagination
+        return recipeService.getAllRecipes();
+    }
+
     @GetMapping("/api/recipe/{id}")
     public Recipe getRecipe(@PathVariable Long id) {
         Optional<Recipe> optionalRecipe = recipeService.getRecipeById(id);
