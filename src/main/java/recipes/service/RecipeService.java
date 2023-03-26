@@ -1,10 +1,13 @@
-package recipes.recipe;
+package recipes.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import recipes.model.Recipe;
+import recipes.repository.RecipeRepository;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class RecipeService {

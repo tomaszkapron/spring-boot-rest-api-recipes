@@ -1,27 +1,29 @@
-package recipes.recipe;
+package recipes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import recipes.security.UserEntity;
+import recipes.model.Recipe;
+import recipes.service.RecipeService;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class RecipeController {
 
     @Autowired
     RecipeService recipeService;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/api/recipe/all")
     public List<Recipe> getAllRecipes() {
         //TODO: add pagination

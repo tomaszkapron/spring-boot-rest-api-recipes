@@ -1,5 +1,7 @@
-package recipes.security;
+package recipes.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,25 +9,36 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import recipes.dto.AuthenticationResponse;
+import recipes.dto.LoginRequest;
+import recipes.model.UserEntity;
+import recipes.service.AuthService;
 
 import javax.validation.Valid;
 
 @RestController
-public class RegistrationController {
-    @Autowired
-    PasswordEncoder encoder;
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthController {
 
     @Autowired
-    UserService userService;
+    PasswordEncoder encoder;
+    @Autowired
+    AuthService authService;
 
     @PostMapping("/api/register")
     public ResponseEntity<String> register(@Valid @RequestBody UserEntity userEntity) {
-        if (userService.existsByEmail(userEntity.getEmail())) {
+        if (authService.existsByEmail(userEntity.getEmail())) {
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
         userEntity.setPassword(encoder.encode(userEntity.getPassword()));
-        userService.saveUser(userEntity);
+        authService.saveUser(userEntity);
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @PostMapping("/api/login")
+    public AuthenticationResponse login(@Valid @RequestBody UserEntity loginRequest) {
+         return authService.login(loginRequest);
     }
 
     @PostMapping("/actuator/shutdown")

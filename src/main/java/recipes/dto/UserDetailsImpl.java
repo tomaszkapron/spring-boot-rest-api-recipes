@@ -1,8 +1,9 @@
-package recipes.security;
+package recipes.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import recipes.model.UserEntity;
 
 import java.util.Collection;
 import java.util.List;

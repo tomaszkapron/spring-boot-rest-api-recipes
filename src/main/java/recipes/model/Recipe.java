@@ -1,11 +1,9 @@
-package recipes.recipe;
+package recipes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import recipes.security.UserEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

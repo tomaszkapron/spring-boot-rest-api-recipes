@@ -43,3 +43,8 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+.idea
+
+src/resources/app.public
+src/resources/app.secret
