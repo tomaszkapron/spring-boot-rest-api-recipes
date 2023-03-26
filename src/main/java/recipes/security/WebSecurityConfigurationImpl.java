@@ -31,7 +31,7 @@ public class WebSecurityConfigurationImpl extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/api/register", "/actuator/shutdown", "/api/login").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/**").authenticated();
 
         http.addFilterBefore(JwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

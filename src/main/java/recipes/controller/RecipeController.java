@@ -18,19 +18,20 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@RequestMapping("/api/recipe")
 public class RecipeController {
 
     @Autowired
     RecipeService recipeService;
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/api/recipe/all")
+    @GetMapping("/all")
     public List<Recipe> getAllRecipes() {
         //TODO: add pagination
         return recipeService.getAllRecipes();
     }
 
-    @GetMapping("/api/recipe/{id}")
+    @GetMapping("/{id}")
     public Recipe getRecipe(@PathVariable Long id) {
         Optional<Recipe> optionalRecipe = recipeService.getRecipeById(id);
         if (optionalRecipe.isPresent()) {
@@ -40,7 +41,7 @@ public class RecipeController {
         }
     }
 
-    @GetMapping("/api/recipe/search")
+    @GetMapping("/search")
     @ResponseBody
     public List<Recipe> getRecipeByCatOrName(@RequestParam(required = false) String category,
                                              @RequestParam(required = false) String name) {
@@ -56,14 +57,14 @@ public class RecipeController {
         return recipeService.findByCategoryIgnoreCaseOrderByDateDesc(category);
     }
 
-    @PostMapping("/api/recipe/new")
+    @PostMapping("/new")
     public String postRecipe(@AuthenticationPrincipal UserDetails details, @Valid @RequestBody Recipe recipe) {
         recipe.setOwnerUser(details.getUsername());
         Recipe saveRecipe = recipeService.saveRecipe(recipe);
         return String.format("{\"id\": %d}", saveRecipe.getId());
     }
 
-    @PutMapping("/api/recipe/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> updateRecipe(@AuthenticationPrincipal UserDetails details,
                                                @PathVariable Long id,
                                                @Valid @RequestBody Recipe recipe) {
@@ -79,7 +80,7 @@ public class RecipeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/api/recipe/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipe(@AuthenticationPrincipal UserDetails details,
                                                @PathVariable Long id) {
         String recipeOwner;
