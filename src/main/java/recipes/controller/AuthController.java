@@ -23,17 +23,12 @@ import javax.validation.Valid;
 public class AuthController {
     @Autowired
     PasswordEncoder encoder;
-    @Autowired
+    @Autowired3
     AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody UserEntity userEntity) {
-        if (authService.existsByEmail(userEntity.getEmail())) {
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-        }
-        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
-        authService.saveUser(userEntity);
-        return new ResponseEntity<String>(HttpStatus.OK);
+        return authService.saveUser(userEntity);
     }
 
     @PostMapping("/login")
