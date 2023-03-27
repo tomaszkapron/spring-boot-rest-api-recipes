@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-public class LoginRequest {
+public class LoginRegisterRequest {
     @NotBlank(message = "Email is required")
     private String email;
     @NotBlank(message = "Password is required")
