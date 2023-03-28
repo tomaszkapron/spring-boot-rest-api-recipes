@@ -5,6 +5,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import recipes.dto.UserDetailsImpl;
+import recipes.exception.UnauthorizedException;
 import recipes.model.UserEntity;
 import io.jsonwebtoken.Jwts;
 import recipes.service.UserDetailsServiceImpl;
@@ -28,11 +31,10 @@ import java.security.KeyStore;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Set;
 
 @Service
 public class JwtProvider {
-
-    private Key key;
     @Value("${jwt.secret.key}")
     private String secretKeyPath;
     private String secretKey;
@@ -41,6 +43,9 @@ public class JwtProvider {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    Set<String> blacklist;
 
     @PostConstruct
     protected void init() {
@@ -77,11 +82,11 @@ public class JwtProvider {
     }
 
     public boolean validateToken(String token) {
+        if (blacklist.contains(token)) {
+            throw new UnauthorizedException("Token is blacklisted, login again");
+        }
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-
-
-
             return true;
         } catch (Exception e) {
             throw new RuntimeException("Invalid token");
@@ -96,5 +101,16 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public String getTokenFromAuthentication(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+        Object credentials = authentication.getCredentials();
+        if (credentials instanceof String) {
+            return (String) credentials;
+        }
+        return null;
     }
 }

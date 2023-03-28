@@ -1,7 +1,6 @@
 package recipes.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +21,7 @@ import recipes.security.JwtProvider;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,6 +33,7 @@ public class AuthService {
     private final JwtProvider JwtProvider;
     private final PasswordEncoder encoder;
     private final MailService mailService;
+    private final Set<String> blacklist;
 
 
     public ResponseEntity<String> registerUser(LoginRegisterRequest registerRequest) {
@@ -103,5 +104,11 @@ public class AuthService {
         userRepository.save(user);
 
         return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
+    }
+
+    public void logout(Authentication authentication) {
+        String token = JwtProvider.getTokenFromAuthentication(authentication);
+        blacklist.add(token);
+        SecurityContextHolder.clearContext();
     }
 }
