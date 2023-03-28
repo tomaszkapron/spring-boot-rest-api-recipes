@@ -1,6 +1,7 @@
 package recipes.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import recipes.dto.AuthenticationResponse;
 import recipes.dto.LoginRegisterRequest;
+import recipes.exception.ResourceNotFoundException;
+import recipes.exception.UnauthorizedException;
 import recipes.model.NotificationEmail;
 import recipes.model.UserEntity;
 import recipes.model.VerificationToken;
@@ -30,6 +33,7 @@ public class AuthService {
     private final JwtProvider JwtProvider;
     private final PasswordEncoder encoder;
     private final MailService mailService;
+
 
     public ResponseEntity<String> registerUser(LoginRegisterRequest registerRequest) {
         if (existsByEmail(registerRequest.getEmail())) {
@@ -51,10 +55,10 @@ public class AuthService {
         return new ResponseEntity<>( "User registered successfully", HttpStatus.OK);
     }
 
-    private static NotificationEmail prepareActivationMail(String userEmail, String registrationToken) {
+    private NotificationEmail prepareActivationMail(String userEmail, String registrationToken) {
         return new NotificationEmail("Activate your account", userEmail,
                         "please click on the below url to activate your account : " +
-                        "http://localhost:8080/api/auth/accountVerification/" + registrationToken);
+                        "http://localhost:8881/api/auth/accountVerification/" + registrationToken);
     }
 
     private String generateVerificationToken(UserEntity user) {
@@ -71,15 +75,15 @@ public class AuthService {
 
     public Optional<UserEntity> findByEmail(String email) { return this.userRepository.findByEmail(email); }
 
-    public boolean existsById(Long id) {
-        return this.userRepository.existsById(id);
-    }
-
     public boolean existsByEmail(String email) {
         return this.userRepository.existsUserEntityByEmail(email);
     }
 
     public AuthenticationResponse login(UserEntity loginRequest) {
+        UserEntity user = findByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User with this email is not registered"));
+        if (!user.isEnabled()) {
+            throw new UnauthorizedException("User is not activated");
+        }
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);

@@ -33,7 +33,7 @@ public class AuthController {
          return authService.login(loginRequest);
     }
 
-    @PostMapping("/accountVerification/{token}")
+    @GetMapping("/accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
         return authService.verifyAccount(token);
     }
