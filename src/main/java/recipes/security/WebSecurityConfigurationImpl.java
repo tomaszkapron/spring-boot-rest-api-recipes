@@ -1,5 +1,6 @@
 package recipes.security;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import java.util.Set;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class WebSecurityConfigurationImpl extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailsService;
@@ -66,10 +68,5 @@ public class WebSecurityConfigurationImpl extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public Set<String> JwtBlacklist() {
-        return new HashSet<>();
     }
 }

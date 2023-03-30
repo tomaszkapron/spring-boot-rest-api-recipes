@@ -106,9 +106,9 @@ public class AuthService {
         return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
     }
 
-    public void logout(Authentication authentication) {
-        String token = JwtProvider.getTokenFromAuthentication(authentication);
-        blacklist.add(token);
+    public void logout(String authentication) {
+        String jwtToken = authentication.substring(7);
+        blacklist.add(jwtToken);
         SecurityContextHolder.clearContext();
     }
 }

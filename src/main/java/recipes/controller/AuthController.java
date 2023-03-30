@@ -37,8 +37,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public void logout(Authentication authentication) {
-        authService.logout(authentication);
+    public void logout(@RequestHeader("Authorization") String authorizationHeader) {
+        authService.logout(authorizationHeader);
     }
 
     @GetMapping("/accountVerification/{token}")

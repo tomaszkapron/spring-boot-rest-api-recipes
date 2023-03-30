@@ -1,9 +1,7 @@
 package recipes.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;q
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import recipes.dto.UserDetailsImpl;
 import recipes.exception.UnauthorizedException;
-import recipes.model.UserEntity;
 import io.jsonwebtoken.Jwts;
 import recipes.service.UserDetailsServiceImpl;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.Key;
-import java.security.KeyStore;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Properties;
 import java.util.Set;
 
 @Service
